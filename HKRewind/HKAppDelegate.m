@@ -7,6 +7,7 @@
 //
 
 #import "HKAppDelegate.h"
+#import "HKRewindViewController.h"
 
 @implementation HKAppDelegate
 
@@ -15,6 +16,8 @@
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     // Override point for customization after application launch.
     self.window.backgroundColor = [UIColor whiteColor];
+    self.window.rootViewController = [[HKRewindViewController alloc] init];
+    
     [self.window makeKeyAndVisible];
     return YES;
 }
