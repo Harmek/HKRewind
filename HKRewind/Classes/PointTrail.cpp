@@ -34,7 +34,7 @@ void PointTrail::AddPoint(CGFloat x, CGFloat y)
 {
     m_xCoordinates.push_back(x);
     m_yCoordinates.push_back(y);
-    if (m_xCoordinates.size() > m_bufferSize)
+    while (m_xCoordinates.size() > m_bufferSize)
     {
         m_xCoordinates.pop_front();
         m_yCoordinates.pop_front();
