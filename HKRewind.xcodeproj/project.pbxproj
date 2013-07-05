@@ -17,11 +17,13 @@
 		504854C91780FCAB00655429 /* Default@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 504854C81780FCAB00655429 /* Default@2x.png */; };
 		504854CB1780FCAC00655429 /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 504854CA1780FCAC00655429 /* Default-568h@2x.png */; };
 		504854D31780FCD100655429 /* HKRewindGestureRecognizer.mm in Sources */ = {isa = PBXBuildFile; fileRef = 504854D21780FCD100655429 /* HKRewindGestureRecognizer.mm */; };
-		504854D61781190B00655429 /* PointTrail.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 504854D41781190B00655429 /* PointTrail.cpp */; };
 		504854D91784CA9300655429 /* HKRewindViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 504854D81784CA9300655429 /* HKRewindViewController.m */; };
+		504854E01787615100655429 /* HKRewindHUDView.m in Sources */ = {isa = PBXBuildFile; fileRef = 504854DF1787615100655429 /* HKRewindHUDView.m */; };
+		56B224CE797D46A1BAEC9D54 /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = B7A4AD6F7BAF42F9B5AC5ADB /* libPods.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		3BA11DD6474248B4864B10CF /* Pods/Pods.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = Pods/Pods.xcconfig; sourceTree = SOURCE_ROOT; };
 		504854B11780FCAB00655429 /* HKRewind.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = HKRewind.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		504854B41780FCAB00655429 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		504854B61780FCAB00655429 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -37,10 +39,11 @@
 		504854CA1780FCAC00655429 /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
 		504854D11780FCD100655429 /* HKRewindGestureRecognizer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = HKRewindGestureRecognizer.h; path = Classes/HKRewindGestureRecognizer.h; sourceTree = "<group>"; };
 		504854D21780FCD100655429 /* HKRewindGestureRecognizer.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = HKRewindGestureRecognizer.mm; path = Classes/HKRewindGestureRecognizer.mm; sourceTree = "<group>"; };
-		504854D41781190B00655429 /* PointTrail.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = PointTrail.cpp; path = Classes/PointTrail.cpp; sourceTree = "<group>"; };
-		504854D51781190B00655429 /* PointTrail.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PointTrail.h; path = Classes/PointTrail.h; sourceTree = "<group>"; };
 		504854D71784CA9300655429 /* HKRewindViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HKRewindViewController.h; sourceTree = "<group>"; };
 		504854D81784CA9300655429 /* HKRewindViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HKRewindViewController.m; sourceTree = "<group>"; };
+		504854DE1787615100655429 /* HKRewindHUDView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = HKRewindHUDView.h; path = Classes/HKRewindHUDView.h; sourceTree = "<group>"; };
+		504854DF1787615100655429 /* HKRewindHUDView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = HKRewindHUDView.m; path = Classes/HKRewindHUDView.m; sourceTree = "<group>"; };
+		B7A4AD6F7BAF42F9B5AC5ADB /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -51,6 +54,7 @@
 				504854B51780FCAB00655429 /* UIKit.framework in Frameworks */,
 				504854B71780FCAB00655429 /* Foundation.framework in Frameworks */,
 				504854B91780FCAB00655429 /* CoreGraphics.framework in Frameworks */,
+				56B224CE797D46A1BAEC9D54 /* libPods.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -63,6 +67,7 @@
 				504854BA1780FCAB00655429 /* HKRewind */,
 				504854B31780FCAB00655429 /* Frameworks */,
 				504854B21780FCAB00655429 /* Products */,
+				3BA11DD6474248B4864B10CF /* Pods/Pods.xcconfig */,
 			);
 			sourceTree = "<group>";
 		};
@@ -80,6 +85,7 @@
 				504854B41780FCAB00655429 /* UIKit.framework */,
 				504854B61780FCAB00655429 /* Foundation.framework */,
 				504854B81780FCAB00655429 /* CoreGraphics.framework */,
+				B7A4AD6F7BAF42F9B5AC5ADB /* libPods.a */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -92,10 +98,10 @@
 				504854BB1780FCAB00655429 /* Supporting Files */,
 				504854D11780FCD100655429 /* HKRewindGestureRecognizer.h */,
 				504854D21780FCD100655429 /* HKRewindGestureRecognizer.mm */,
-				504854D41781190B00655429 /* PointTrail.cpp */,
-				504854D51781190B00655429 /* PointTrail.h */,
 				504854D71784CA9300655429 /* HKRewindViewController.h */,
 				504854D81784CA9300655429 /* HKRewindViewController.m */,
+				504854DE1787615100655429 /* HKRewindHUDView.h */,
+				504854DF1787615100655429 /* HKRewindHUDView.m */,
 			);
 			path = HKRewind;
 			sourceTree = "<group>";
@@ -121,9 +127,11 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 504854CE1780FCAC00655429 /* Build configuration list for PBXNativeTarget "HKRewind" */;
 			buildPhases = (
+				E0C2F99A81844B758B14FA29 /* Check Pods Manifest.lock */,
 				504854AD1780FCAB00655429 /* Sources */,
 				504854AE1780FCAB00655429 /* Frameworks */,
 				504854AF1780FCAB00655429 /* Resources */,
+				892AC622EFDA4DA2A273223C /* Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -175,6 +183,39 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
+/* Begin PBXShellScriptBuildPhase section */
+		892AC622EFDA4DA2A273223C /* Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Pods-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		E0C2F99A81844B758B14FA29 /* Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Check Pods Manifest.lock";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
 		504854AD1780FCAB00655429 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
@@ -183,8 +224,8 @@
 				504854C11780FCAB00655429 /* main.m in Sources */,
 				504854C51780FCAB00655429 /* HKAppDelegate.m in Sources */,
 				504854D31780FCD100655429 /* HKRewindGestureRecognizer.mm in Sources */,
-				504854D61781190B00655429 /* PointTrail.cpp in Sources */,
 				504854D91784CA9300655429 /* HKRewindViewController.m in Sources */,
+				504854E01787615100655429 /* HKRewindHUDView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -260,6 +301,7 @@
 		};
 		504854CF1780FCAC00655429 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 3BA11DD6474248B4864B10CF /* Pods/Pods.xcconfig */;
 			buildSettings = {
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "HKRewind/HKRewind-Prefix.pch";
@@ -272,6 +314,7 @@
 		};
 		504854D01780FCAC00655429 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 3BA11DD6474248B4864B10CF /* Pods/Pods.xcconfig */;
 			buildSettings = {
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "HKRewind/HKRewind-Prefix.pch";
@@ -301,6 +344,7 @@
 				504854D01780FCAC00655429 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

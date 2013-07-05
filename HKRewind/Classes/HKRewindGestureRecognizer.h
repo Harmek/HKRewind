@@ -8,66 +8,12 @@
 
 #import <UIKit/UIKit.h>
 
-@class HKRewindGestureRecognizer;
-@protocol HKRewindTriggerDelegate;
-@protocol HKRewindTrigger <NSObject>
-
-@property (nonatomic, weak) id<HKRewindTriggerDelegate> delegate;
-
-- (void)reset;
-
-- (void)rewindGestureRecognizer:(HKRewindGestureRecognizer *)recognizer
-                   touchesBegan:(NSSet *)touches
-                        atPoint:(CGPoint)point;
-
-- (void)rewindGestureRecognizer:(HKRewindGestureRecognizer *)recognizer
-                   touchesMoved:(NSSet *)touches
-                        atPoint:(CGPoint)point;
-
-@end
-
-@protocol HKRewindTriggerDelegate <NSObject>
-
-- (void)rewindTriggerRecognized:(id<HKRewindTrigger>)trigger;
-
-@end
-
-@interface HKRewindTriggerPoints : NSObject<HKRewindTrigger>
-
-@property (nonatomic, assign) NSUInteger nbPointsTrigger;
-
-@end
-
-@interface HKRewindTriggerDistance : NSObject<HKRewindTrigger>
-
-@property (nonatomic, assign) CGFloat distanceTrigger;
-
-@end
-
-@interface HKRewindTriggerTime : NSObject<HKRewindTrigger>
-
-@property (nonatomic, assign) NSTimeInterval timeTrigger;
-
-@end
-
-
-typedef NS_ENUM(NSUInteger, HKRewindTriggerType)
-{
-    HKRewindTriggerTypePoints = 0,
-    HKRewindTriggerTypeDistance,
-    HKRewindTriggerTypeTime,
-    HKRewindTriggerTypeCustom,
-
-    HKRewindTriggerTypeMax
-};
-
-@interface HKRewindGestureRecognizer : UIGestureRecognizer <HKRewindTriggerDelegate>
+@interface HKRewindGestureRecognizer : UIGestureRecognizer
 
 /**
  * The number of fingers that must be touching the view for this gesture to be recognized.
  */
 @property (nonatomic, assign) NSUInteger numberOfTouchesRequired;
-
 
 /**
  * The number of seconds the user is allowed to be inactive before the recognizer is cancelled.
@@ -75,22 +21,34 @@ typedef NS_ENUM(NSUInteger, HKRewindTriggerType)
 @property (nonatomic, assign) NSTimeInterval timeout;
 
 /**
- * The number of points (CGPoint) that the gesture recognizer stores in order to run the recognition algorithm.
- * Be aware that the recognizer performs a bounding-box computation everytime a point is added with a complexity of, as of current state, O(n) over this collection.
+ * Initial radius of the circle that the user is most likely to draw.
+ * This value is only use at the beginning of the recognition, the center property is updated whenever the user draws approximately half a circle.
  */
-@property (nonatomic, assign) NSUInteger bufferSize;
-
-
-/**
- * The condition that will trigger the recognizer while the user describes a curved gesture on the view.
- * It can either be the number of points, the distance traveled by the fingers, the time or any custom trigger.
- */
-@property (nonatomic, assign) HKRewindTriggerType triggerType;
+@property (nonatomic, assign) CGFloat initialRadius;
 
 /**
- * The object responsible for triggering the recognition.
- * Use this parameter to set a custom trigger or customize the one in place.
- * Use the triggerType parameter to determine the type of the trigger.
+ * Boolean value determining whether the user is performing a clockwise rotation or not
  */
-@property (nonatomic, strong) id<HKRewindTrigger> trigger;
+@property (nonatomic, readonly) BOOL clockwise;
+
+/**
+ * Angle where the user's last touch point is. The rotation value is a single value that varies over time. It is not the delta value from the last time that the rotation was reported. To get the delta, use the rotationDelta property.
+ */
+@property (nonatomic, readonly) CGFloat rotation;
+
+/**
+ * Delta value from the last rotation value. This value is already signed, do not use the clockwise property to negate this value.
+ */
+@property (nonatomic, readonly) CGFloat rotationDelta;
+
+/**
+ * The velocity of the rotation gesture in radians per second.
+ */
+@property (nonatomic, readonly) CGFloat velocity;
+
+/**
+ * Approximate center of the circle formed by the user's touches in view's coordinates.
+ */
+@property (nonatomic, readonly) CGPoint center;
+
 @end

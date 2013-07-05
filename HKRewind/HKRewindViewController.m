@@ -8,6 +8,7 @@
 
 #import "HKRewindViewController.h"
 #import "HKRewindGestureRecognizer.h"
+#import "HKRewindHUDView.h"
 
 @interface HKRewindViewController ()
 
@@ -30,8 +31,13 @@
     [super viewDidLoad];
 	// Do any additional setup after loading the view.
 
+    HKRewindHUDView *hudView = [[HKRewindHUDView alloc] initWithFrame:CGRectMake(100, 100, 200, 200)];
+    [self.view addSubview:hudView];
+    hudView.circularProgressView.current = 1;
+    hudView.backgroundColor = [UIColor grayColor];
+    hudView.textLabel.text = @"LOLOLOL";
+    hudView.detailLabel.text = @"Omgomgomg";
     HKRewindGestureRecognizer *recognizer = [[HKRewindGestureRecognizer alloc] initWithTarget:self action:@selector(gestureRecognized:)];
-    recognizer.triggerType = HKRewindTriggerTypeDistance;
     [self.view addGestureRecognizer:recognizer];
 }
 
