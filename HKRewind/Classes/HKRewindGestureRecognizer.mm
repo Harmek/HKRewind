@@ -73,7 +73,8 @@ static CGFloat CGPointSignedAngle(CGPoint a, CGPoint b)
 {
     self.numberOfTouchesRequired = 2;
     self.timeout = 1;
-    self.initialRadius = 150;
+    self.maximumRadius = 150;
+    self.minimumRadius = 50;
 }
 
 - (id)init
@@ -157,7 +158,7 @@ static CGFloat CGPointSignedAngle(CGPoint a, CGPoint b)
         CGPoint viewCenter = CGPointMake(CGRectGetMidX(self.view.bounds),
                                          CGRectGetMidY(self.view.bounds));
         CGPoint vectToCenter = CGPointNormalize(CGPointSubtract(viewCenter, touchPoint));
-        self.center = CGPointAdd(touchPoint, CGPointScale(vectToCenter, self.initialRadius));
+        self.center = CGPointAdd(touchPoint, CGPointScale(vectToCenter, self.maximumRadius));
     }
 }
 
@@ -184,16 +185,19 @@ static CGFloat CGPointSignedAngle(CGPoint a, CGPoint b)
     CGPoint currentVector = CGPointSubtract(touchPoint, self.center);
     CGFloat currentLength = CGPointLength(currentVector);
     currentVector = CGPointNormalize(currentVector);
-    if (currentLength > self.initialRadius)
+    if (currentLength > self.maximumRadius)
     {
-        self.center = CGPointAdd(touchPoint, CGPointScale(currentVector, - self.initialRadius));
+        self.center = CGPointAdd(touchPoint, CGPointScale(currentVector, -self.maximumRadius));
+    }
+    else if (currentLength < self.minimumRadius)
+    {
+        self.center = CGPointAdd(touchPoint, CGPointScale(currentVector, -self.minimumRadius));
     }
 
     CGPoint previousVector = CGPointNormalize(CGPointSubtract(self.previousTouch, self.center));
     CGFloat currentAngle = atan2(currentVector.y, currentVector.x);
     self.rotation = currentAngle;
     self.rotationDelta = CGPointSignedAngle(previousVector, currentVector);
-    NSLog(@"%f", self.rotationDelta);
     self.velocity = self.rotationDelta / (timestamp - self.lastTimestamp);
 
     self.previousTouch = touchPoint;

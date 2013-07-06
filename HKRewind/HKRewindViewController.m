@@ -55,7 +55,7 @@
     switch (recognizer.state) {
         case UIGestureRecognizerStateChanged:
             [self.hudView addProgression:recognizer.rotationDelta];
-//            self.centerView.center = recognizer.center;
+            self.centerView.center = recognizer.center;
             break;
 
         default:

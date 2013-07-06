@@ -20,11 +20,9 @@
  */
 @property (nonatomic, assign) NSTimeInterval timeout;
 
-/**
- * Initial radius of the circle that the user is most likely to draw.
- * This value is only use at the beginning of the recognition, the center property is updated whenever the user draws approximately half a circle.
- */
-@property (nonatomic, assign) CGFloat initialRadius;
+@property (nonatomic, assign) CGFloat minimumRadius;
+
+@property (nonatomic, assign) CGFloat maximumRadius;
 
 @property (nonatomic, readonly) CGFloat radius;
 
