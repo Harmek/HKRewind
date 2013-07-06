@@ -43,6 +43,14 @@ static CGPoint CGPointScale(CGPoint a, CGFloat f)
     return CGPointMake(a.x * f, a.y * f);
 }
 
+static CGFloat CGPointSignedAngle(CGPoint a, CGPoint b)
+{
+    CGFloat sinValue = a.x * b.y - a.y * b.x;
+    CGFloat cosValue = CGPointDot(a, b);
+    
+    return atan2(sinValue, cosValue);
+}
+
 #pragma mark — Rewind Gesture Recognizer
 
 @interface HKRewindGestureRecognizer ()
@@ -65,7 +73,7 @@ static CGPoint CGPointScale(CGPoint a, CGFloat f)
 {
     self.numberOfTouchesRequired = 2;
     self.timeout = 1;
-    self.initialRadius = 100;
+    self.initialRadius = 150;
 }
 
 - (id)init
@@ -173,25 +181,21 @@ static CGPoint CGPointScale(CGPoint a, CGFloat f)
         return;
     }
 
-    CGPoint initialVector = CGPointNormalize(CGPointSubtract(self.initialTouch, self.center));
-    CGPoint currentVector = CGPointNormalize(CGPointSubtract(touchPoint, self.center));
-    CGFloat dot = CGPointDot(initialVector, currentVector);
-    if (fabs(dot + 1) <= .05)
+    CGPoint currentVector = CGPointSubtract(touchPoint, self.center);
+    CGFloat currentLength = CGPointLength(currentVector);
+    currentVector = CGPointNormalize(currentVector);
+    if (currentLength > self.initialRadius)
     {
-        self.center = CGPointScale(CGPointAdd(touchPoint, self.initialTouch), .5);
-        self.radius = CGPointLength(CGPointSubtract(touchPoint, self.initialTouch)) * .5;
-        self.initialTouch = touchPoint;
-        currentVector = CGPointNormalize(CGPointSubtract(touchPoint, self.center));
+        self.center = CGPointAdd(touchPoint, CGPointScale(currentVector, - self.initialRadius));
     }
 
     CGPoint previousVector = CGPointNormalize(CGPointSubtract(self.previousTouch, self.center));
     CGFloat currentAngle = atan2(currentVector.y, currentVector.x);
-    CGFloat previousAngle = atan2(previousVector.y, previousVector.x);
-
     self.rotation = currentAngle;
-    self.rotationDelta = currentAngle - previousAngle;
+    self.rotationDelta = CGPointSignedAngle(previousVector, currentVector);
+    NSLog(@"%f", self.rotationDelta);
     self.velocity = self.rotationDelta / (timestamp - self.lastTimestamp);
-    
+
     self.previousTouch = touchPoint;
     self.lastTimestamp = timestamp;
 

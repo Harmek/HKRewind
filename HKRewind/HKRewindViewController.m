@@ -34,7 +34,10 @@
     [super viewDidLoad];
 	// Do any additional setup after loading the view.
 
-    self.hudView = [[HKRewindHUDView alloc] initWithFrame:CGRectMake(100, 100, 200, 200)];
+    self.hudView = [[HKRewindHUDView alloc] initWithFrame:CGRectMake(self.view.bounds.size.width * .5 - 100,
+                                                                     self.view.bounds.size.height * .5 - 100,
+                                                                     200,
+                                                                     200)];
     [self.view addSubview:self.hudView];
     self.hudView.textLabel.text = @"Rewind";
     self.hudView.detailLabel.text = @"...";
@@ -49,11 +52,10 @@
 
 - (void)gestureRecognized:(HKRewindGestureRecognizer *)recognizer
 {
-//    NSLog(@"%@", recognizer);
     switch (recognizer.state) {
         case UIGestureRecognizerStateChanged:
             [self.hudView addProgression:recognizer.rotationDelta];
-            self.centerView.frame = CGRectMake(recognizer.center.x, recognizer.center.y, 25, 25);
+//            self.centerView.center = recognizer.center;
             break;
 
         default:
