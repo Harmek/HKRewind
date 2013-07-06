@@ -26,6 +26,8 @@
  */
 @property (nonatomic, assign) CGFloat initialRadius;
 
+@property (nonatomic, readonly) CGFloat radius;
+
 /**
  * Boolean value determining whether the user is performing a clockwise rotation or not
  */

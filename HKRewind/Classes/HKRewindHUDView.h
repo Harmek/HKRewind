@@ -17,4 +17,9 @@
 @property (nonatomic, readonly) UIView *backgroundView;
 @property (nonatomic, readonly) UIView *contentView;
 
+@property (nonatomic, copy) NSString *rewindDisplayText;
+@property (nonatomic, copy) NSString *forwardDisplayText;
+
+- (void)addProgression:(CGFloat)rotationDelta;
+
 @end

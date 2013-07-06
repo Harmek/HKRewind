@@ -36,7 +36,7 @@
     {
         _backgroundView = [[UIView alloc] initWithFrame:self.frame];
         _backgroundView.translatesAutoresizingMaskIntoConstraints = NO;
-        [_backgroundView setBackgroundColor:[UIColor colorWithWhite:.0 alpha:.3]];
+        [_backgroundView setBackgroundColor:[UIColor grayColor]];
         [self addSubview:_backgroundView];
         NSArray *vertConstraints = [NSLayoutConstraint constraintsWithVisualFormat:@"V:|[_backgroundView]|"
                                                                            options:0
@@ -47,6 +47,13 @@
                                                                            metrics:nil
                                                                              views:NSDictionaryOfVariableBindings(_backgroundView)];
         [self addConstraints:[vertConstraints arrayByAddingObjectsFromArray:horiConstraints]];
+
+        CAShapeLayer *shapeLayer = [[CAShapeLayer alloc] init];
+        CGMutablePathRef path = CGPathCreateMutable();
+        CGPathAddEllipseInRect(path, NULL, _backgroundView.bounds);
+        shapeLayer.fillColor = [[UIColor colorWithWhite:1 alpha:.5] CGColor];
+        shapeLayer.path = path;
+        [_backgroundView.layer setMask:shapeLayer];
     }
 
     return _backgroundView;
@@ -81,16 +88,21 @@
     {
         _circularProgressView = [[HKCircularProgressView alloc] initWithFrame:self.frame];
         _circularProgressView.translatesAutoresizingMaskIntoConstraints = NO;
+        _circularProgressView.fillRadius = 1.;
+        _circularProgressView.progressTintColor = [UIColor colorWithWhite:0 alpha:1];
+        [_circularProgressView setMax:2 * M_PI animated:NO];
+        [_circularProgressView setCurrent:2 * M_PI animated:NO];
         [self.contentView addSubview:_circularProgressView];
-        NSArray *vertConstraints = [NSLayoutConstraint constraintsWithVisualFormat:@"V:|-[_circularProgressView]-|"
+        NSArray *vertConstraints = [NSLayoutConstraint constraintsWithVisualFormat:@"V:|-5-[_circularProgressView]-5-|"
                                                                                          options:0
                                                                                          metrics:nil
                                                                                            views:NSDictionaryOfVariableBindings(_circularProgressView)];
-        NSArray *horiConstraints = [NSLayoutConstraint constraintsWithVisualFormat:@"H:|-[_circularProgressView]-|"
+        NSArray *horiConstraints = [NSLayoutConstraint constraintsWithVisualFormat:@"H:|-5-[_circularProgressView]-5-|"
                                                                                      options:0
                                                                                      metrics:nil
                                                                                        views:NSDictionaryOfVariableBindings(_circularProgressView)];
         [self.contentView addConstraints:[vertConstraints arrayByAddingObjectsFromArray:horiConstraints]];
+        [self.contentView sendSubviewToBack:_circularProgressView];
     }
 
     return _circularProgressView;
@@ -107,16 +119,22 @@
         _textLabel.textColor = [UIColor whiteColor];
         _textLabel.textAlignment = NSTextAlignmentCenter;
         [self.contentView addSubview:_textLabel];
-        UILabel *detailLabel = self.detailLabel;
-        NSArray *vertConstraints = [NSLayoutConstraint constraintsWithVisualFormat:@"V:[_textLabel]-[detailLabel]-|"
-                                                                           options:0
-                                                                           metrics:nil
-                                                                             views:NSDictionaryOfVariableBindings(_textLabel, detailLabel)];
-        NSArray *horiConstraints = [NSLayoutConstraint constraintsWithVisualFormat:@"H:|-[_textLabel]-|"
-                                                                           options:0
-                                                                           metrics:nil
-                                                                             views:NSDictionaryOfVariableBindings(_textLabel)];
-        [self.contentView addConstraints:[vertConstraints arrayByAddingObjectsFromArray:horiConstraints]];
+        NSLayoutConstraint *centerX = [NSLayoutConstraint constraintWithItem:_textLabel
+                                                              attribute:NSLayoutAttributeCenterX
+                                                              relatedBy:NSLayoutRelationEqual
+                                                                 toItem:self.contentView
+                                                              attribute:NSLayoutAttributeCenterX
+                                                             multiplier:1.0
+                                                               constant:0];
+        NSLayoutConstraint *centerY = [NSLayoutConstraint constraintWithItem:_textLabel
+                                                                   attribute:NSLayoutAttributeCenterY
+                                                                   relatedBy:NSLayoutRelationEqual
+                                                                      toItem:self.contentView
+                                                                   attribute:NSLayoutAttributeCenterY
+                                                                  multiplier:1.0
+                                                                    constant:0];
+        [self.contentView addConstraints:@[centerX, centerY]];
+        [self.contentView bringSubviewToFront:_textLabel];
     }
 
     return _textLabel;
@@ -133,24 +151,25 @@
         _detailLabel.textColor = [UIColor whiteColor];
         _detailLabel.textAlignment = NSTextAlignmentCenter;
         [self.contentView addSubview:_detailLabel];
-
-        NSArray *vertConstraints = [NSLayoutConstraint constraintsWithVisualFormat:@"V:[_detailLabel]-|"
+        UILabel *textLabel = self.textLabel;
+        NSArray *vertConstraints = [NSLayoutConstraint constraintsWithVisualFormat:@"V:[textLabel]-[_detailLabel]"
                                                                            options:0
                                                                            metrics:nil
-                                                                             views:NSDictionaryOfVariableBindings(_detailLabel)];
+                                                                             views:NSDictionaryOfVariableBindings(_detailLabel, textLabel)];
         NSArray *horiConstraints = [NSLayoutConstraint constraintsWithVisualFormat:@"H:|-[_detailLabel]-|"
                                                                            options:0
                                                                            metrics:nil
                                                                              views:NSDictionaryOfVariableBindings(_detailLabel)];
         [self.contentView addConstraints:[vertConstraints arrayByAddingObjectsFromArray:horiConstraints]];
+        [self.contentView bringSubviewToFront:_detailLabel];
     }
 
     return _detailLabel;
 }
 
-- (void)layoutSubviews
+- (void)addProgression:(CGFloat)rotationDelta
 {
-    [super layoutSubviews];
+    [self.circularProgressView setCurrent:(self.circularProgressView.current + rotationDelta) animated:NO];
 }
 
 /*

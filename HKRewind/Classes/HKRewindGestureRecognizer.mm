@@ -55,6 +55,7 @@ static CGPoint CGPointScale(CGPoint a, CGFloat f)
 @property (nonatomic, assign) CGPoint previousTouch;
 @property (nonatomic, assign) CGPoint initialTouch;
 @property (nonatomic, assign) CGPoint center;
+@property (nonatomic, assign) CGFloat radius;
 
 @end
 
@@ -178,6 +179,7 @@ static CGPoint CGPointScale(CGPoint a, CGFloat f)
     if (fabs(dot + 1) <= .05)
     {
         self.center = CGPointScale(CGPointAdd(touchPoint, self.initialTouch), .5);
+        self.radius = CGPointLength(CGPointSubtract(touchPoint, self.initialTouch)) * .5;
         self.initialTouch = touchPoint;
         currentVector = CGPointNormalize(CGPointSubtract(touchPoint, self.center));
     }
@@ -192,6 +194,8 @@ static CGPoint CGPointScale(CGPoint a, CGFloat f)
     
     self.previousTouch = touchPoint;
     self.lastTimestamp = timestamp;
+
+    self.state = UIGestureRecognizerStateChanged;
 }
 
 @end
