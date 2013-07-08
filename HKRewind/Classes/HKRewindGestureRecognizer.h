@@ -51,4 +51,6 @@
  */
 @property (nonatomic, readonly) CGPoint center;
 
+@property (nonatomic, assign) CGFloat threshold;
+
 @end
