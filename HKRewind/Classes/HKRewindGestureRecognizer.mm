@@ -9,7 +9,7 @@
 #import "HKRewindGestureRecognizer.h"
 #import <UIKit/UIGestureRecognizerSubclass.h>
 
-#import <deque>
+#import <vector>
 #import <numeric>
 
 #pragma mark — CGPoint additions
@@ -68,7 +68,7 @@ CGPoint operator+(CGPoint lhs, const CGPoint& rhs)
 
 @interface HKRewindGestureRecognizer ()
 {
-    std::deque<CGPoint> m_points;
+    std::vector<CGPoint> m_points;
 }
 
 @property (nonatomic, assign) CGFloat rotation;
@@ -83,6 +83,8 @@ CGPoint operator+(CGPoint lhs, const CGPoint& rhs)
 
 @end
 
+#define BUFFER_SIZE 32
+
 @implementation HKRewindGestureRecognizer
 
 - (void)_defaultInit
@@ -92,6 +94,7 @@ CGPoint operator+(CGPoint lhs, const CGPoint& rhs)
     self.maximumRadius = 150;
     self.minimumRadius = 50;
     self.threshold = M_PI * .05;
+    m_points.reserve(BUFFER_SIZE);
 }
 
 - (id)init
@@ -172,12 +175,12 @@ CGPoint operator+(CGPoint lhs, const CGPoint& rhs)
 
         self.initialTouch = touchPoint;
         self.previousTouch = touchPoint;
-        self->m_points.push_back(touchPoint);
-
-        CGPoint viewCenter = CGPointMake(CGRectGetMidX(self.view.bounds),
-                                         CGRectGetMidY(self.view.bounds));
-        CGPoint vectToCenter = CGPointNormalize(CGPointSubtract(viewCenter, touchPoint));
-        self.center = CGPointAdd(touchPoint, CGPointScale(vectToCenter, (self.minimumRadius + self.maximumRadius) * .5));
+        m_points.push_back(touchPoint);
+//
+//        CGPoint viewCenter = CGPointMake(CGRectGetMidX(self.view.bounds),
+//                                         CGRectGetMidY(self.view.bounds));
+//        CGPoint vectToCenter = CGPointNormalize(CGPointSubtract(viewCenter, touchPoint));
+//        self.center = CGPointAdd(touchPoint, CGPointScale(vectToCenter, (self.minimumRadius + self.maximumRadius) * .5));
     }
 }
 
@@ -202,55 +205,34 @@ CGPoint operator+(CGPoint lhs, const CGPoint& rhs)
     }
     self.lastTimestamp = timestamp;
 
+    NSAssert(m_points.size(), nil);
+    
     CGPoint lastPoint = m_points.back();
     self->m_points.push_back(touchPoint);
-    if (self->m_points.size() < 32)
-        return;
+    if (m_points.size() >= BUFFER_SIZE)
+    {
+        CGPoint arcCenter = std::accumulate(m_points.begin(), m_points.end(), CGPointZero);
+        arcCenter = CGPointScale(arcCenter, 1. / m_points.size());
+        CGPoint midPoint = CGPointScale(CGPointAdd(m_points.back(), m_points.front()), .5);
+        CGPoint vectorToCenter = CGPointNormalize(CGPointSubtract(midPoint, arcCenter));
+        self.center = CGPointAdd(arcCenter, CGPointScale(vectorToCenter, self.maximumRadius));
+        m_points.clear();
+        m_points.push_back(touchPoint);
+    }
+    else
+    {
+        if (self.state == UIGestureRecognizerStatePossible)
+            return;
+    }
 
-    while (self->m_points.size() > 32)
-        self->m_points.pop_front();
-
-    CGPoint arcCenter = std::accumulate(m_points.begin(), m_points.end(), CGPointZero);
-    arcCenter = CGPointScale(arcCenter, 1. / m_points.size());
-    CGPoint midPoint = CGPointScale(CGPointAdd(m_points.back(), m_points.front()), .5);
-    CGPoint vectorToCenter = CGPointNormalize(CGPointSubtract(midPoint, arcCenter));
-    self.center = CGPointAdd(arcCenter, CGPointScale(vectorToCenter, self.maximumRadius));
     CGPoint previousVector = CGPointNormalize(CGPointSubtract(lastPoint, self.center));
     CGPoint currentVector = CGPointNormalize(CGPointSubtract(touchPoint, self.center));
     self.rotation = atan2(currentVector.y, currentVector.x);
     self.rotationDelta = CGPointSignedAngle(previousVector, currentVector);
-    self.state = UIGestureRecognizerStateChanged;
-
-//    if (fabs(self.rotationDelta) >= self.threshold)
-//        self.rotationDelta = .0;
-//
-//    CGPoint currentVector = CGPointSubtract(touchPoint, self.center);
-//    CGFloat currentLength = CGPointLength(currentVector);
-//    currentVector = CGPointNormalize(currentVector);
-//    if (currentLength > self.maximumRadius)
-//    {
-//        self.center = CGPointAdd(touchPoint, CGPointScale(currentVector, -self.maximumRadius));
-//    }
-//    else if (currentLength < self.minimumRadius)
-//    {
-//        self.center = CGPointAdd(touchPoint, CGPointScale(currentVector, -self.minimumRadius));
-//    }
-//
-//    CGPoint previousVector = CGPointNormalize(CGPointSubtract(self.previousTouch, self.center));
-//    CGFloat currentAngle = atan2(currentVector.y, currentVector.x);
-//
-//    self.rotation = currentAngle;
-//    CGFloat delta = CGPointSignedAngle(previousVector, currentVector);
-//    self.rotationDelta += delta;
-//    self.velocity = self.rotationDelta / (timestamp - self.lastTimestamp);
-//
-//    self.previousTouch = touchPoint;
-//
-//    if (fabs(self.rotationDelta) >= self.threshold)
-//    {
-////        self.rotationDelta = delta;
-//        self.state = UIGestureRecognizerStateChanged;
-//    }
+    if (self.state == UIGestureRecognizerStatePossible)
+        self.state = UIGestureRecognizerStateBegan;
+    else
+        self.state = UIGestureRecognizerStateChanged;
 }
 
 @end
