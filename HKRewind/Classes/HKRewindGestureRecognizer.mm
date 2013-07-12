@@ -9,10 +9,17 @@
 #import "HKRewindGestureRecognizer.h"
 #import <UIKit/UIGestureRecognizerSubclass.h>
 
+#import <deque>
 #import <vector>
 #import <numeric>
+#import <functional>
 
 #pragma mark — CGPoint additions
+
+static CGFloat CGPointDeterminant(CGPoint a, CGPoint b)
+{
+    return a.x * b.y - a.y * b.x;
+}
 
 static CGFloat CGPointDot(CGPoint a, CGPoint b)
 {
@@ -27,7 +34,7 @@ static CGFloat CGPointLength(CGPoint p)
 static CGPoint CGPointNormalize(CGPoint p)
 {
     CGFloat length = CGPointLength(p);
-    
+
     return CGPointMake(p.x / length, p.y / length);
 }
 
@@ -55,20 +62,114 @@ static CGFloat CGPointSignedAngle(CGPoint a, CGPoint b)
 {
     CGFloat sinValue = a.x * b.y - a.y * b.x;
     CGFloat cosValue = CGPointDot(a, b);
-    
+
     return atan2(sinValue, cosValue);
 }
 
-CGPoint operator+(CGPoint lhs, const CGPoint& rhs)
+CGPoint operator+(const CGPoint& lhs, const CGPoint& rhs)
 {
     return CGPointAdd(lhs, rhs);
 }
+
+CGPoint operator-(const CGPoint& lhs, const CGPoint& rhs)
+{
+    return CGPointSubtract(lhs, rhs);
+}
+
+CGPoint operator*(const CGPoint& lhs, CGFloat k)
+{
+    return CGPointScale(lhs, k);
+}
+
+CGPoint operator*(CGFloat k, const CGPoint& rhs)
+{
+    return CGPointScale(rhs, k);
+}
+
+CGPoint operator/(const CGPoint& lhs, CGFloat k)
+{
+    return CGPointScale(lhs, 1. / k);
+}
+
+static bool CGPointHigherThan(CGPoint a, CGPoint b)
+{
+    return a.y > b.y;
+}
+
+#pragma mark — HKLine
+
+struct HKLine
+{
+    CGPoint point;
+    CGPoint vector;
+
+    typedef enum IntersectionType
+    {
+        IntersectionTypeColinear = 0,
+        IntersectionTypeOverlap,
+        IntersectionTypePoint,
+
+        IntersectionTypeMax
+    } IntersectionType;
+
+    inline HKLine(CGPoint point, CGPoint vector)
+    : point(point)
+    , vector(vector)
+    {
+    }
+
+    inline static IntersectionType Intersect(const HKLine& u, const HKLine& v, CGPoint *intersection)
+    {
+        CGFloat determinant = CGPointDeterminant(u.vector, v.vector);
+
+        if (determinant == .0)
+        {
+            if (CGPointDeterminant(v.point - u.point, v.vector) == .0)
+            {
+                return IntersectionTypeOverlap;
+            }
+
+            return IntersectionTypeColinear;
+        }
+
+        // p + t r = q + u s
+        // We need k and l such as "u.point + k * u.vector = v.point + l * v.vector"
+        CGFloat k = CGPointDeterminant((v.point - u.point), v.vector) / CGPointDeterminant(u.vector, v.vector);
+//        CGFloat l = CGPointDeterminant((v.point - u.point), u.vector) / CGPointDeterminant(u.vector, v.vector);
+
+        if (intersection)
+            *intersection = u.point + CGPointScale(u.vector, k);
+
+        return IntersectionTypePoint;
+    }
+
+    inline IntersectionType Intersects(const HKLine& other, CGPoint *intersection) const
+    {
+        return HKLine::Intersect(*this, other, intersection);
+    }
+};
+
+struct HKApplyTransform : public std::unary_function<CGPoint, CGPoint>
+{
+    inline HKApplyTransform(const CGAffineTransform& transform)
+    : m_transform(transform)
+    {
+    }
+
+    inline CGPoint operator() (const CGPoint& point) const
+    {
+        return CGPointApplyAffineTransform(point, m_transform);
+    }
+
+private:
+    const CGAffineTransform& m_transform;
+};
 
 #pragma mark — Rewind Gesture Recognizer
 
 @interface HKRewindGestureRecognizer ()
 {
-    std::vector<CGPoint> m_points;
+    std::deque<CGPoint> m_points;
 }
 
 @property (nonatomic, assign) CGFloat rotation;
@@ -83,7 +184,7 @@ CGPoint operator+(CGPoint lhs, const CGPoint& rhs)
 
 @end
 
-#define BUFFER_SIZE 32
+#define BUFFER_SIZE 8
 
 @implementation HKRewindGestureRecognizer
 
@@ -94,7 +195,7 @@ CGPoint operator+(CGPoint lhs, const CGPoint& rhs)
     self.maximumRadius = 150;
     self.minimumRadius = 50;
     self.threshold = M_PI * .05;
-    m_points.reserve(BUFFER_SIZE);
+//    m_points.reserve(BUFFER_SIZE);
 }
 
 - (id)init
@@ -205,34 +306,67 @@ CGPoint operator+(CGPoint lhs, const CGPoint& rhs)
     }
     self.lastTimestamp = timestamp;
 
-    NSAssert(m_points.size(), nil);
-    
-    CGPoint lastPoint = m_points.back();
+//    CGPoint lastPoint = m_points.back();
     self->m_points.push_back(touchPoint);
-    if (m_points.size() >= BUFFER_SIZE)
+
+    while (m_points.size() > BUFFER_SIZE)
     {
-        CGPoint arcCenter = std::accumulate(m_points.begin(), m_points.end(), CGPointZero);
-        arcCenter = CGPointScale(arcCenter, 1. / m_points.size());
-        CGPoint midPoint = CGPointScale(CGPointAdd(m_points.back(), m_points.front()), .5);
-        CGPoint vectorToCenter = CGPointNormalize(CGPointSubtract(midPoint, arcCenter));
-        self.center = CGPointAdd(arcCenter, CGPointScale(vectorToCenter, self.maximumRadius));
-        m_points.clear();
-        m_points.push_back(touchPoint);
-    }
-    else
-    {
-        if (self.state == UIGestureRecognizerStatePossible)
-            return;
+        m_points.pop_front();
     }
 
-    CGPoint previousVector = CGPointNormalize(CGPointSubtract(lastPoint, self.center));
-    CGPoint currentVector = CGPointNormalize(CGPointSubtract(touchPoint, self.center));
-    self.rotation = atan2(currentVector.y, currentVector.x);
-    self.rotationDelta = CGPointSignedAngle(previousVector, currentVector);
-    if (self.state == UIGestureRecognizerStatePossible)
-        self.state = UIGestureRecognizerStateBegan;
-    else
+    CGPoint oldestPoint = m_points.front();
+    CGPoint latestPoint = m_points.back();
+    CGPoint arcVector = CGPointNormalize(latestPoint - oldestPoint);
+    CGFloat rotation = atan2(arcVector.y, arcVector.x);
+    CGAffineTransform transform = CGAffineTransformMakeRotation(- rotation);
+    transform.tx = -oldestPoint.x;
+    transform.ty = -oldestPoint.y;
+
+    std::vector<CGPoint> transformedPoints;
+    transformedPoints.resize(m_points.size());
+    std::transform(m_points.begin(), m_points.end(),
+                   transformedPoints.begin(), HKApplyTransform(transform));
+    CGPoint tipPoint = *std::max_element(transformedPoints.begin(), transformedPoints.end(), CGPointHigherThan);
+    tipPoint = CGPointApplyAffineTransform(tipPoint, CGAffineTransformInvert(transform));
+
+    CGPoint firstSegment = tipPoint - oldestPoint;
+    CGPoint secondSegment = latestPoint - tipPoint;
+    CGPoint midFirstSegment = (tipPoint + oldestPoint) * .5;
+    CGPoint midSecondSegment = (latestPoint + tipPoint) * .5;
+
+    
+//    self.center = tipPoint;
+//    if (m_points.size() >= BUFFER_SIZE)
+//    {
+//        CGPoint arcCenter = std::accumulate(m_points.begin(), m_points.end(), CGPointZero);
+//        arcCenter = CGPointScale(arcCenter, 1. / m_points.size());
+//        CGPoint midPoint = CGPointScale(CGPointAdd(m_points.back(), m_points.front()), .5);
+//        CGPoint vectorToCenter = CGPointNormalize(CGPointSubtract(midPoint, arcCenter));
+//        self.center = CGPointAdd(arcCenter, CGPointScale(vectorToCenter, self.minimumRadius));
+//        m_points.clear();
+//        m_points.push_back(touchPoint);
+//    }
+//    else
+//    {
+//        if (self.state == UIGestureRecognizerStatePossible)
+//            return;
+//    }
+//
+//    CGPoint previousVector = CGPointNormalize(CGPointSubtract(lastPoint, self.center));
+//    CGPoint currentVector = CGPointNormalize(CGPointSubtract(touchPoint, self.center));
+//    self.rotation = atan2(currentVector.y, currentVector.x);
+//    self.rotationDelta = CGPointSignedAngle(previousVector, currentVector);
+//    if (self.state == UIGestureRecognizerStatePossible)
+//        self.state = UIGestureRecognizerStateBegan;
+//    else
         self.state = UIGestureRecognizerStateChanged;
+}
+
+- (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event
+{
+    [super touchesEnded:touches withEvent:event];
+
+    self.state = UIGestureRecognizerStateEnded;
 }
 
 @end
