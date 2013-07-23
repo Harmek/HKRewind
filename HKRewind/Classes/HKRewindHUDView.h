@@ -45,6 +45,8 @@
 @property (nonatomic, readonly) HKCircularProgressView *circularProgressView;
 
 /** The view that is displayed behind the HUD's other content.
+ 
+ Use this property to assign a custom background view to the HUD. The background view is placed behind the content view and its frame is automatically adjusted so that it fills the bounds of the HUD. A circular shape mask is also applied.
  */
 @property (nonatomic, strong) UIView *backgroundView;
 
