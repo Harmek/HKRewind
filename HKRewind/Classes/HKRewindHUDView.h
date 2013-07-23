@@ -31,14 +31,47 @@
 #import <UIKit/UIKit.h>
 #import <HKCircularProgressView.h>
 
+/**
+ * HKRewindHUDView is a simple view that encapsulates a HKCircularProgressView and two labels. It is supposed to be used as a visual representation of the HKRewindGestureRecognizer progression. 
+ */
 @interface HKRewindHUDView : UIView
 
+/**---------------------------------------------------------------------------------------
+ * @name Accessing the HUD's Views
+ *  ---------------------------------------------------------------------------------------
+ */
+/** Returns the HKCircularProgressView used to display the progression (read-only).
+ */
 @property (nonatomic, readonly) HKCircularProgressView *circularProgressView;
-@property (nonatomic, readonly) UILabel *textLabel;
-@property (nonatomic, readonly) UILabel *detailLabel;
+
+/** The view that is displayed behind the HUD's other content.
+ */
 @property (nonatomic, readonly) UIView *backgroundView;
+
+/** The main view to which you can add custom content. (read-only)
+ */
 @property (nonatomic, readonly) UIView *contentView;
 
+
+/**---------------------------------------------------------------------------------------
+ * @name Accessing the HUD's labels
+ *  ---------------------------------------------------------------------------------------
+ */
+/** Returns the label used for the main textual content of HUD. (read-only)
+ */
+@property (nonatomic, readonly) UILabel *textLabel;
+
+/** Returns the secondary label of the HUD if one exists. (read-only)
+ */
+@property (nonatomic, readonly) UILabel *detailLabel;
+
+/**---------------------------------------------------------------------------------------
+ * @name Managing the Cell’s State
+ *  ---------------------------------------------------------------------------------------
+ */
+/** Add the specified angle (in radians) to the circular progress view.
+ @param rotationDelta The angle, in radians, that will be added to the circular progress view.
+ */
 - (void)addProgression:(CGFloat)rotationDelta;
 
 @end
