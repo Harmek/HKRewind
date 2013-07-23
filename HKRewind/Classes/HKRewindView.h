@@ -1,5 +1,5 @@
 //
-//  HKRewindHUDView.h
+//  HKRewindView.h
 //  HKRewind
 //
 //  Copyright (c) 2012-2013, Panos Baroudjian.
@@ -34,7 +34,7 @@
 /**
  * HKRewindHUDView is a simple view that encapsulates a HKCircularProgressView and two labels. It is supposed to be used as a visual representation of the HKRewindGestureRecognizer progression. 
  */
-@interface HKRewindHUDView : UIView
+@interface HKRewindView : UIView
 
 /**---------------------------------------------------------------------------------------
  * @name Accessing the HUD's Views

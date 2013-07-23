@@ -30,11 +30,12 @@
 
 #import "HKRewindViewController.h"
 #import "HKRewindGestureRecognizer.h"
-#import "HKRewindHUDView.h"
+#import "HKRewindView.h"
+#import "HKRewindHUD.h"
 
 @interface HKRewindViewController ()
 
-@property (nonatomic, strong) HKRewindHUDView *hudView;
+@property (nonatomic, strong) HKRewindView *hudView;
 
 @end
 
@@ -55,11 +56,10 @@
     [super viewDidLoad];
 	// Do any additional setup after loading the view.
 
-    self.hudView = [[HKRewindHUDView alloc] initWithFrame:CGRectMake(self.view.bounds.size.width * .5 - 100,
+    self.hudView = [[HKRewindView alloc] initWithFrame:CGRectMake(self.view.bounds.size.width * .5 - 100,
                                                                      self.view.bounds.size.height * .5 - 100,
                                                                      200,
                                                                      200)];
-    [self.view addSubview:self.hudView];
     self.hudView.textLabel.text = @"Rewind";
     self.hudView.detailLabel.text = @"...";
     HKRewindGestureRecognizer *recognizer = [[HKRewindGestureRecognizer alloc] initWithTarget:self action:@selector(gestureRecognized:)];
@@ -69,10 +69,24 @@
 - (void)gestureRecognized:(HKRewindGestureRecognizer *)recognizer
 {
     switch (recognizer.state) {
-        case UIGestureRecognizerStateChanged:
-            [self.hudView addProgression:recognizer.rotationDelta];
+        case UIGestureRecognizerStateBegan:
+        {
+            HKRewindHUD *hud = [HKRewindHUD HUDForView:self.view];
+            [hud showHUDAnimated:YES];
             break;
-
+        }
+        case UIGestureRecognizerStateChanged:
+        {
+            HKRewindHUD *hud = [HKRewindHUD HUDForView:self.view];
+            [hud.rewindView addProgression:recognizer.rotationDelta];
+            break;
+        }
+        case UIGestureRecognizerStateEnded:
+        {
+            HKRewindHUD *hud = [HKRewindHUD HUDForView:self.view];
+            [hud hideHUDAnimated:YES];
+            break;
+        }
         default:
             break;
     }

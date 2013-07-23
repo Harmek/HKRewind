@@ -1,5 +1,5 @@
 //
-//  HKRewindHUDView.m
+//  HKRewindView.m
 //  HKRewind
 //
 //  Copyright (c) 2012-2013, Panos Baroudjian.
@@ -28,9 +28,9 @@
 //  POSSIBILITY OF SUCH DAMAGE.
 
 
-#import "HKRewindHUDView.h"
+#import "HKRewindView.h"
 
-@interface HKRewindHUDView ()
+@interface HKRewindView ()
 
 @property (nonatomic, strong) HKCircularProgressView *circularProgressView;
 @property (nonatomic, strong) UILabel *textLabel;
@@ -40,7 +40,7 @@
 
 @end
 
-@implementation HKRewindHUDView
+@implementation HKRewindView
 @synthesize backgroundView = _backgroundView;
 
 - (void)setBackgroundView:(UIView *)backgroundView
