@@ -145,7 +145,6 @@ HKLine GetBisector(CGPoint a, CGPoint b)
 {
     CGPoint segmentMiddle = (a + b) * .5;
     CGPoint bisectSecondPoint = CGPointRotateAround(b, segmentMiddle, M_PI_2);
-    assert(!CGPointEqualToPoint(bisectSecondPoint, segmentMiddle));
     CGPoint bisectVector = CGPointNormalize(bisectSecondPoint - segmentMiddle);
     HKLine bisector = HKLine(segmentMiddle, bisectVector);
 

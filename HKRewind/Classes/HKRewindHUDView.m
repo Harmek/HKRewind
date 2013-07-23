@@ -35,37 +35,53 @@
 @property (nonatomic, strong) HKCircularProgressView *circularProgressView;
 @property (nonatomic, strong) UILabel *textLabel;
 @property (nonatomic, strong) UILabel *detailLabel;
-@property (nonatomic, strong) UIView *backgroundView;
+//@property (nonatomic, strong) UIView *backgroundView;
 @property (nonatomic, strong) UIView *contentView;
 
 @end
 
 @implementation HKRewindHUDView
+@synthesize backgroundView = _backgroundView;
+
+- (void)setBackgroundView:(UIView *)backgroundView
+{
+    if (_backgroundView)
+    {
+        [_backgroundView removeFromSuperview];
+        _backgroundView = nil;
+    }
+
+    _backgroundView = backgroundView;
+    _backgroundView.frame = self.frame;
+    _backgroundView.translatesAutoresizingMaskIntoConstraints = NO;
+//    
+    [self addSubview:_backgroundView];
+    NSArray *vertConstraints = [NSLayoutConstraint constraintsWithVisualFormat:@"V:|[_backgroundView]|"
+                                                                       options:0
+                                                                       metrics:nil
+                                                                         views:NSDictionaryOfVariableBindings(_backgroundView)];
+    NSArray *horiConstraints = [NSLayoutConstraint constraintsWithVisualFormat:@"H:|[_backgroundView]|"
+                                                                       options:0
+                                                                       metrics:nil
+                                                                         views:NSDictionaryOfVariableBindings(_backgroundView)];
+    [self addConstraints:[vertConstraints arrayByAddingObjectsFromArray:horiConstraints]];
+
+    CAShapeLayer *shapeLayer = [[CAShapeLayer alloc] init];
+    CGMutablePathRef path = CGPathCreateMutable();
+    CGPathAddEllipseInRect(path, NULL, _backgroundView.bounds);
+    shapeLayer.fillColor = [[UIColor colorWithWhite:1 alpha:.5] CGColor];
+    shapeLayer.path = path;
+    [_backgroundView.layer setMask:shapeLayer];
+
+}
 
 - (UIView *)backgroundView
 {
     if (!_backgroundView)
     {
-        _backgroundView = [[UIView alloc] initWithFrame:self.frame];
-        _backgroundView.translatesAutoresizingMaskIntoConstraints = NO;
-        [_backgroundView setBackgroundColor:[UIColor grayColor]];
-        [self addSubview:_backgroundView];
-        NSArray *vertConstraints = [NSLayoutConstraint constraintsWithVisualFormat:@"V:|[_backgroundView]|"
-                                                                           options:0
-                                                                           metrics:nil
-                                                                             views:NSDictionaryOfVariableBindings(_backgroundView)];
-        NSArray *horiConstraints = [NSLayoutConstraint constraintsWithVisualFormat:@"H:|[_backgroundView]|"
-                                                                           options:0
-                                                                           metrics:nil
-                                                                             views:NSDictionaryOfVariableBindings(_backgroundView)];
-        [self addConstraints:[vertConstraints arrayByAddingObjectsFromArray:horiConstraints]];
-
-        CAShapeLayer *shapeLayer = [[CAShapeLayer alloc] init];
-        CGMutablePathRef path = CGPathCreateMutable();
-        CGPathAddEllipseInRect(path, NULL, _backgroundView.bounds);
-        shapeLayer.fillColor = [[UIColor colorWithWhite:1 alpha:.5] CGColor];
-        shapeLayer.path = path;
-        [_backgroundView.layer setMask:shapeLayer];
+        UIView *backgroundView = [[UIView alloc] initWithFrame:self.frame];
+        [backgroundView setBackgroundColor:[UIColor grayColor]];
+        [self setBackgroundView:backgroundView];
     }
 
     return _backgroundView;

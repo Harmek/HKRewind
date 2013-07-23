@@ -61,6 +61,10 @@ bool HKArcPoints::TryComputeCenter(CGPoint *outCenter, CGFloat tolerance)
 {
     CGPoint oldestPoint = m_points.front();
     CGPoint latestPoint = m_points.back();
+
+    if (CGPointEqualToPoint(oldestPoint, latestPoint))
+        return NO;
+    
     CGPoint arcVector = CGPointNormalize(latestPoint - oldestPoint);
     CGFloat rotation = atan2(arcVector.y, arcVector.x);
     CGAffineTransform transform = CGAffineTransformMakeTranslation(-oldestPoint.x, -oldestPoint.y);
@@ -78,6 +82,9 @@ bool HKArcPoints::TryComputeCenter(CGPoint *outCenter, CGFloat tolerance)
     if (fabs(dotValue) > tolerance)
         return false;
 
+    if (CGPointEqualToPoint(oldestPoint, tipPoint) || CGPointEqualToPoint(latestPoint, tipPoint))
+        return NO;
+    
     HKLine firstBisector = GetBisector(oldestPoint, tipPoint);
     HKLine secondBisector = GetBisector(tipPoint, latestPoint);
     if (HKLine::Intersect(firstBisector, secondBisector, outCenter) != HKLine::IntersectionTypePoint)

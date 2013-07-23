@@ -35,7 +35,6 @@
 @interface HKRewindViewController ()
 
 @property (nonatomic, strong) HKRewindHUDView *hudView;
-@property (nonatomic, strong) UIView *centerView;
 
 @end
 
@@ -64,12 +63,7 @@
     self.hudView.textLabel.text = @"Rewind";
     self.hudView.detailLabel.text = @"...";
     HKRewindGestureRecognizer *recognizer = [[HKRewindGestureRecognizer alloc] initWithTarget:self action:@selector(gestureRecognized:)];
-//    recognizer.numberOfTouchesRequired = 1;
     [self.view addGestureRecognizer:recognizer];
-
-    self.centerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 25, 25)];
-    [self.view addSubview:self.centerView];
-    self.centerView.backgroundColor = [UIColor redColor];
 }
 
 - (void)gestureRecognized:(HKRewindGestureRecognizer *)recognizer
@@ -77,7 +71,6 @@
     switch (recognizer.state) {
         case UIGestureRecognizerStateChanged:
             [self.hudView addProgression:recognizer.rotationDelta];
-//            self.centerView.center = recognizer.center;
             break;
 
         default:

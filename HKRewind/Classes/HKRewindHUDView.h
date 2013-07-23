@@ -46,7 +46,7 @@
 
 /** The view that is displayed behind the HUD's other content.
  */
-@property (nonatomic, readonly) UIView *backgroundView;
+@property (nonatomic, strong) UIView *backgroundView;
 
 /** The main view to which you can add custom content. (read-only)
  */
