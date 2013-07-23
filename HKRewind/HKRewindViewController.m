@@ -42,7 +42,7 @@
     self.hudView.textLabel.text = @"Rewind";
     self.hudView.detailLabel.text = @"...";
     HKRewindGestureRecognizer *recognizer = [[HKRewindGestureRecognizer alloc] initWithTarget:self action:@selector(gestureRecognized:)];
-    recognizer.numberOfTouchesRequired = 1;
+//    recognizer.numberOfTouchesRequired = 1;
     [self.view addGestureRecognizer:recognizer];
 
     self.centerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 25, 25)];
@@ -55,7 +55,7 @@
     switch (recognizer.state) {
         case UIGestureRecognizerStateChanged:
             [self.hudView addProgression:recognizer.rotationDelta];
-            self.centerView.center = recognizer.center;
+//            self.centerView.center = recognizer.center;
             break;
 
         default:

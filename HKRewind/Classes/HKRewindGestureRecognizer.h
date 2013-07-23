@@ -8,6 +8,10 @@
 
 #import <UIKit/UIKit.h>
 
+/**
+ * HKRewindGestureRecognizer is a concrete subclass of UIGestureRecognizer that looks for rotation gestures, more specifically when the user moves the fingers to draw a circle (like on a vinyl disk).
+ * Rewind is a continuous gesture. It begins when the touches have moved enough to be considered a circular motion. The gesture changes when the finger moves. It ends when the fingers have lifted. At each stage in the gesture, the gesture recognizer sends its action message.
+ */
 @interface HKRewindGestureRecognizer : UIGestureRecognizer
 
 /**
@@ -20,24 +24,22 @@
  */
 @property (nonatomic, assign) NSTimeInterval timeout;
 
-@property (nonatomic, assign) CGFloat minimumRadius;
-
+/**
+ * The approximate radius of the circle that the user is likely to draw. If a visual cue is shown (like a circle) when the user performs the gesture, it should be set to the visual cue's radius.
+ */
 @property (nonatomic, assign) CGFloat maximumRadius;
 
-@property (nonatomic, readonly) CGFloat radius;
-
 /**
- * Boolean value determining whether the user is performing a clockwise rotation or not
+ * The maximum absolute value that rotationDelta will be assigned, in radians. Default value is Pi/50.
+ */
+@property (nonatomic, assign) CGFloat maximumRotationDelta;
+/**
+ * Boolean value determining whether the user is performing a clockwise rotation or not.
  */
 @property (nonatomic, readonly) BOOL clockwise;
 
 /**
- * Angle where the user's last touch point is. The rotation value is a single value that varies over time. It is not the delta value from the last time that the rotation was reported. To get the delta, use the rotationDelta property.
- */
-@property (nonatomic, readonly) CGFloat rotation;
-
-/**
- * Delta value from the last rotation value. This value is already signed, do not use the clockwise property to negate this value.
+ * Delta value from the last rotation value. This is a signed value, do not use the clockwise property to negate this value.
  */
 @property (nonatomic, readonly) CGFloat rotationDelta;
 
@@ -45,12 +47,5 @@
  * The velocity of the rotation gesture in radians per second.
  */
 @property (nonatomic, readonly) CGFloat velocity;
-
-/**
- * Approximate center of the circle formed by the user's touches in view's coordinates.
- */
-@property (nonatomic, readonly) CGPoint center;
-
-@property (nonatomic, assign) CGFloat threshold;
 
 @end

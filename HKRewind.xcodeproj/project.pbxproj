@@ -19,6 +19,8 @@
 		504854D31780FCD100655429 /* HKRewindGestureRecognizer.mm in Sources */ = {isa = PBXBuildFile; fileRef = 504854D21780FCD100655429 /* HKRewindGestureRecognizer.mm */; };
 		504854D91784CA9300655429 /* HKRewindViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 504854D81784CA9300655429 /* HKRewindViewController.m */; };
 		504854E01787615100655429 /* HKRewindHUDView.m in Sources */ = {isa = PBXBuildFile; fileRef = 504854DF1787615100655429 /* HKRewindHUDView.m */; };
+		50B193D0179DF78400106485 /* HKArcPoints.mm in Sources */ = {isa = PBXBuildFile; fileRef = 50B193CE179DF78400106485 /* HKArcPoints.mm */; };
+		50B193D4179DF81A00106485 /* HKGeometryHelpers.mm in Sources */ = {isa = PBXBuildFile; fileRef = 50B193D2179DF81A00106485 /* HKGeometryHelpers.mm */; };
 		56B224CE797D46A1BAEC9D54 /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = B7A4AD6F7BAF42F9B5AC5ADB /* libPods.a */; };
 /* End PBXBuildFile section */
 
@@ -43,6 +45,10 @@
 		504854D81784CA9300655429 /* HKRewindViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HKRewindViewController.m; sourceTree = "<group>"; };
 		504854DE1787615100655429 /* HKRewindHUDView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = HKRewindHUDView.h; path = Classes/HKRewindHUDView.h; sourceTree = "<group>"; };
 		504854DF1787615100655429 /* HKRewindHUDView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = HKRewindHUDView.m; path = Classes/HKRewindHUDView.m; sourceTree = "<group>"; };
+		50B193CE179DF78400106485 /* HKArcPoints.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = HKArcPoints.mm; path = Classes/HKArcPoints.mm; sourceTree = "<group>"; };
+		50B193CF179DF78400106485 /* HKArcPoints.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = HKArcPoints.h; path = Classes/HKArcPoints.h; sourceTree = "<group>"; };
+		50B193D2179DF81A00106485 /* HKGeometryHelpers.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = HKGeometryHelpers.mm; path = Classes/HKGeometryHelpers.mm; sourceTree = "<group>"; };
+		50B193D3179DF81A00106485 /* HKGeometryHelpers.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = HKGeometryHelpers.h; path = Classes/HKGeometryHelpers.h; sourceTree = "<group>"; };
 		B7A4AD6F7BAF42F9B5AC5ADB /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -102,6 +108,10 @@
 				504854D81784CA9300655429 /* HKRewindViewController.m */,
 				504854DE1787615100655429 /* HKRewindHUDView.h */,
 				504854DF1787615100655429 /* HKRewindHUDView.m */,
+				50B193CE179DF78400106485 /* HKArcPoints.mm */,
+				50B193CF179DF78400106485 /* HKArcPoints.h */,
+				50B193D2179DF81A00106485 /* HKGeometryHelpers.mm */,
+				50B193D3179DF81A00106485 /* HKGeometryHelpers.h */,
 			);
 			path = HKRewind;
 			sourceTree = "<group>";
@@ -226,6 +236,8 @@
 				504854D31780FCD100655429 /* HKRewindGestureRecognizer.mm in Sources */,
 				504854D91784CA9300655429 /* HKRewindViewController.m in Sources */,
 				504854E01787615100655429 /* HKRewindHUDView.m in Sources */,
+				50B193D0179DF78400106485 /* HKArcPoints.mm in Sources */,
+				50B193D4179DF81A00106485 /* HKGeometryHelpers.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
