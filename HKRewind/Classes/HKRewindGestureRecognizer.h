@@ -70,7 +70,7 @@ Rewind is a continuous gesture. It begins when the touches have moved enough to 
 @property (nonatomic, readonly) BOOL clockwise;
 
 /**
- * Delta value from the last rotation value. This is a signed value, do not use the clockwise property to negate this value.
+ * Angle, in radians, described by the user since the previous move. This is a signed value, do not use the clockwise property to negate this value.
  */
 @property (nonatomic, readonly) CGFloat rotationDelta;
 
