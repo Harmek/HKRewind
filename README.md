@@ -5,6 +5,8 @@ HKRewind
 
 HKRewind features a [UIGestureRecognizer](http://developer.apple.com/library/ios/#documentation/uikit/reference/UIGestureRecognizer_Class/Reference/Reference.html) subclass and a HUD view that help you implement a rewind gesture à la [Paper by Fifty-Three](http://www.fiftythree.com/paper).
 
+HKRewind uses Auto-layout, which makes it iOS6+ compatible only.
+
 How to use it
 -------------
 
