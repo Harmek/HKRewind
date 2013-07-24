@@ -47,9 +47,33 @@
 - (id)initWithFrame:(CGRect)frame
 {
     self = [super initWithFrame:frame];
-    if (self) {
+    if (self)
+    {
         [self _defaultInit];
     }
+
+    return self;
+}
+
+- (id)init
+{
+    self = [super init];
+    if (self)
+    {
+        [self _defaultInit];
+    }
+
+    return self;
+}
+
+- (id)initWithCoder:(NSCoder *)aDecoder
+{
+    self = [super initWithCoder:aDecoder];
+    if (self)
+    {
+        [self _defaultInit];
+    }
+
     return self;
 }
 
@@ -59,6 +83,16 @@
     {
         _rewindView = [[HKRewindView alloc] initWithFrame:CGRectMake(0, 0, 200, 200)];
         [self addSubview:_rewindView];
+        _rewindView.translatesAutoresizingMaskIntoConstraints = NO;
+        NSArray *vertConstraints = [NSLayoutConstraint constraintsWithVisualFormat:@"V:|[_rewindView]|"
+                                                                           options:0
+                                                                           metrics:nil
+                                                                             views:NSDictionaryOfVariableBindings(_rewindView)];
+        NSArray *horiConstraints = [NSLayoutConstraint constraintsWithVisualFormat:@"H:|[_rewindView]|"
+                                                                           options:0
+                                                                           metrics:nil
+                                                                             views:NSDictionaryOfVariableBindings(_rewindView)];
+        [self addConstraints:[vertConstraints arrayByAddingObjectsFromArray:horiConstraints]];
     }
 
     return _rewindView;
@@ -77,37 +111,37 @@
             break;
         }
     }
+    
     if (!hudView)
     {
-        hudView = [[HKRewindHUD alloc] initWithFrame:CGRectZero];
+        hudView = [[self alloc] initWithFrame:CGRectZero];
         NSLayoutConstraint *centerX = [NSLayoutConstraint constraintWithItem:hudView
                                                                    attribute:NSLayoutAttributeCenterX
                                                                    relatedBy:NSLayoutRelationEqual
                                                                       toItem:view
                                                                    attribute:NSLayoutAttributeCenterX
                                                                   multiplier:1.0
-                                                                    constant:0];
+                                                                    constant:.0];
         NSLayoutConstraint *centerY = [NSLayoutConstraint constraintWithItem:hudView
                                                                    attribute:NSLayoutAttributeCenterY
                                                                    relatedBy:NSLayoutRelationEqual
                                                                       toItem:view
                                                                    attribute:NSLayoutAttributeCenterY
                                                                   multiplier:1.0
-                                                                    constant:0];
+                                                                    constant:.0];
         NSLayoutConstraint *height = [NSLayoutConstraint constraintWithItem:hudView
                                                                   attribute:NSLayoutAttributeHeight
                                                                   relatedBy:NSLayoutRelationEqual
                                                                      toItem:nil
-                                                                  attribute:NSLayoutAttributeNotAnAttribute
-                                                                 multiplier:1
-                                                                   constant:200];
+                                                                  attribute:NSLayoutAttributeNotAnAttribute                                                                 multiplier:1.
+                                                                   constant:200.];
         NSLayoutConstraint *width = [NSLayoutConstraint constraintWithItem:hudView
                                                                  attribute:NSLayoutAttributeWidth
                                                                  relatedBy:NSLayoutRelationEqual
                                                                     toItem:nil
                                                                  attribute:NSLayoutAttributeNotAnAttribute
-                                                                multiplier:1
-                                                                  constant:200];
+                                                                multiplier:1.
+                                                                  constant:200.];
         hudView.alpha = .0;
         hudView.translatesAutoresizingMaskIntoConstraints = NO;
         [view addSubview:hudView];

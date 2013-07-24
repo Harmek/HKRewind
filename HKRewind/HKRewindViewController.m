@@ -30,12 +30,9 @@
 
 #import "HKRewindViewController.h"
 #import "HKRewindGestureRecognizer.h"
-#import "HKRewindView.h"
 #import "HKRewindHUD.h"
 
 @interface HKRewindViewController ()
-
-@property (nonatomic, strong) HKRewindView *hudView;
 
 @end
 
@@ -54,15 +51,9 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-	// Do any additional setup after loading the view.
 
-    self.hudView = [[HKRewindView alloc] initWithFrame:CGRectMake(self.view.bounds.size.width * .5 - 100,
-                                                                     self.view.bounds.size.height * .5 - 100,
-                                                                     200,
-                                                                     200)];
-    self.hudView.textLabel.text = @"Rewind";
-    self.hudView.detailLabel.text = @"...";
     HKRewindGestureRecognizer *recognizer = [[HKRewindGestureRecognizer alloc] initWithTarget:self action:@selector(gestureRecognized:)];
+    recognizer.numberOfTouchesRequired = 1;
     [self.view addGestureRecognizer:recognizer];
 }
 
@@ -72,7 +63,7 @@
         case UIGestureRecognizerStateBegan:
         {
             HKRewindHUD *hud = [HKRewindHUD HUDForView:self.view];
-            [hud showHUDAnimated:YES];
+            [hud showHUDAnimated:NO];
             break;
         }
         case UIGestureRecognizerStateChanged:

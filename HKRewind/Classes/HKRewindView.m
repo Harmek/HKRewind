@@ -35,7 +35,6 @@
 @property (nonatomic, strong) HKCircularProgressView *circularProgressView;
 @property (nonatomic, strong) UILabel *textLabel;
 @property (nonatomic, strong) UILabel *detailLabel;
-//@property (nonatomic, strong) UIView *backgroundView;
 @property (nonatomic, strong) UIView *contentView;
 
 @end
@@ -54,7 +53,7 @@
     _backgroundView = backgroundView;
     _backgroundView.frame = self.frame;
     _backgroundView.translatesAutoresizingMaskIntoConstraints = NO;
-//    
+
     [self addSubview:_backgroundView];
     NSArray *vertConstraints = [NSLayoutConstraint constraintsWithVisualFormat:@"V:|[_backgroundView]|"
                                                                        options:0
@@ -91,7 +90,7 @@
 {
     if (!_contentView)
     {
-        _contentView = [[UIView alloc] initWithFrame:self.frame];
+        _contentView = [[UIView alloc] initWithFrame:CGRectZero];
         _contentView.translatesAutoresizingMaskIntoConstraints = NO;
         [_contentView setBackgroundColor:[UIColor clearColor]];
         [self.backgroundView addSubview:_contentView];
@@ -114,7 +113,7 @@
 {
     if (!_circularProgressView)
     {
-        _circularProgressView = [[HKCircularProgressView alloc] initWithFrame:self.frame];
+        _circularProgressView = [[HKCircularProgressView alloc] initWithFrame:CGRectZero];
         _circularProgressView.translatesAutoresizingMaskIntoConstraints = NO;
         _circularProgressView.fillRadius = 1.;
         _circularProgressView.progressTintColor = [UIColor colorWithWhite:0 alpha:1];
@@ -122,13 +121,13 @@
         [_circularProgressView setCurrent:2 * M_PI animated:NO];
         [self.contentView addSubview:_circularProgressView];
         NSArray *vertConstraints = [NSLayoutConstraint constraintsWithVisualFormat:@"V:|-5-[_circularProgressView]-5-|"
-                                                                                         options:0
-                                                                                         metrics:nil
-                                                                                           views:NSDictionaryOfVariableBindings(_circularProgressView)];
+                                                                           options:0
+                                                                           metrics:nil
+                                                                             views:NSDictionaryOfVariableBindings(_circularProgressView)];
         NSArray *horiConstraints = [NSLayoutConstraint constraintsWithVisualFormat:@"H:|-5-[_circularProgressView]-5-|"
-                                                                                     options:0
-                                                                                     metrics:nil
-                                                                                       views:NSDictionaryOfVariableBindings(_circularProgressView)];
+                                                                           options:0
+                                                                           metrics:nil
+                                                                             views:NSDictionaryOfVariableBindings(_circularProgressView)];
         [self.contentView addConstraints:[vertConstraints arrayByAddingObjectsFromArray:horiConstraints]];
         [self.contentView sendSubviewToBack:_circularProgressView];
     }
