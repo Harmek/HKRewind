@@ -3,13 +3,14 @@ HKRewind
 
 ![Screenshot](Screenshot.png "HKRewind")
 
-HKRewind features a UIGestureRecognizer subclass and a HUD view that help you implement a rewind gesture à la [Paper by Fifty-Three](http://www.fiftythree.com/paper).
+HKRewind features a [UIGestureRecognizer](http://developer.apple.com/library/ios/#documentation/uikit/reference/UIGestureRecognizer_Class/Reference/Reference.html) subclass and a HUD view that help you implement a rewind gesture à la [Paper by Fifty-Three](http://www.fiftythree.com/paper).
 
 How to use it
 -------------
 
 1. Use [CocoaPods](http://www.cocoapods.org) by adding *pod 'HKRewind'* in your Podfile.
 2. Manually:
+  * Clone [HKCircularProgressView](https://github.com/Harmek/HKCircularProgressView) (version 1.1.0) and import its files.
   * Clone this repository
   * Copy HKRewindGestureRecognizer, HKRewindView, HKArcPoints, HKGeometryHelpers, HKRewindHUD files (.h, .m and .mm) into your project.
   
@@ -22,7 +23,7 @@ How to configure it
 
 ### HKRewindGestureRecognizer
 
-HKRewindGestureRecognizer emits 3 UIGestureRecognizerStates: UIGestureRecognizerStateBegan (this is when you should show the HUD), UIGestureRecognizerStateChanged (this is when you should use the rotationDelta property in order to update the HUD) and UIGestureRecognizerStateEnded (this is when you should hide the HUD).
+HKRewindGestureRecognizer emits 3 [UIGestureRecognizerStates](http://developer.apple.com/library/ios/documentation/uikit/reference/UIGestureRecognizer_Class/Reference/Reference.html#//apple_ref/c/tdef/UIGestureRecognizerState): UIGestureRecognizerStateBegan (this is when you should show the HUD), UIGestureRecognizerStateChanged (this is when you should use the rotationDelta property in order to update the HUD) and UIGestureRecognizerStateEnded (this is when you should hide the HUD).
 
 You can customize the behavior of the gesture recognizer by editing those properties:
 
@@ -39,7 +40,7 @@ In order to retrieve the information provided by the gesture recognizer, use tho
 
 ### HKRewindHUD
 
-HKRewindHUD should not be *init*ed like a normal view, but instead you should use the _+ (instancetype)HUDForView:(UIView *)view_ method. Show and hide the HUD with *showHUDAnimated:(BOOL)animated* and *hideHUDAnimated:(BOOL)animated*.
+You should not *init* HKRewindHUD like a normal view, but instead you should use the _+ (instancetype)HUDForView:(UIView *)view_ method. Show and hide the HUD with *showHUDAnimated:(BOOL)animated* and *hideHUDAnimated:(BOOL)animated*.
 
 You can customize the behavior of the HUD by accessing and editing those properties:
 
